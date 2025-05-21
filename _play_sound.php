@@ -1,0 +1,16 @@
+#!/usr/bin/php
+<?php
+
+if( !isset($argv[1]) ) {
+	echo "error: need text as argument\n" ;
+	exit( 1 ) ;
+}
+
+$filename = "/dev/shm/" . md5($argv[1]) . "-" . date( microtime(true) ) . ".wav" ;
+
+shell_exec( "/usr/bin/pico2wave -w {$filename} \"{$argv[1]}\"" ) ;
+shell_exec( "/usr/bin/amixer set Headphone 91%" ) ;
+shell_exec( "/usr/bin/play {$filename}" ) ;
+unlink( $filename ) ;
+
+?>
