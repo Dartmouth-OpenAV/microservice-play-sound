@@ -76,7 +76,6 @@ function get_errors() {
 
 function play_text() {
 	global $device ;
-	close_with_400( $device) ;
 
 	if( trim(strtolower(getenv()['host']))==trim(strtolower($device)) ) {
         $data = get_request_body() ;
