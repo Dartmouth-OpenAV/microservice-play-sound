@@ -22,6 +22,8 @@ COPY _etc_apache2_sites-available_default.conf /etc/apache2/sites-available/000-
 RUN DEBIAN_FRONTEND=noninteractive apt-get install alsa-base alsa-utils sox libsndfile1-dev libttspico-utils -y
 COPY _play_sound.php /play_sound.php
 RUN chmod 555 /play_sound.php
+RUN DEBIAN_FRONTEND=noninteractive apt-get install sudo -y
+RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/play" >> /etc/sudoers
 
 COPY _start.sh /start.sh
 RUN chmod 555 /start.sh
