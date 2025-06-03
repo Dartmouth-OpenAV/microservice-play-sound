@@ -88,7 +88,13 @@ function play_text() {
 
 	    $text = str_replace( '"', '\\"', $parsed_data['text'] ) ;
 
-	    shell_exec( "/usr/bin/nohup /play_sound.php \"$text\" &" ) ;
+	    $extra_args = "" ;
+	    if( isset($_GET['announcement_ding']) &&
+	    	$_GET['announcement_ding']=="true" ) {
+	    	$extra_args = "/assets/announcement_ding.wav" ;
+		}
+
+	    shell_exec( "/usr/bin/nohup /play_sound.php \"$text\" {$extra_args} &" ) ;
 
 		close_with_200( "ok!" ) ;
 	} else {

@@ -25,6 +25,8 @@ RUN chmod 555 /play_sound.php
 RUN DEBIAN_FRONTEND=noninteractive apt-get install sudo -y
 RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/play,/usr/bin/amixer" >> /etc/sudoers
 
+COPY _assets /assets
+
 COPY _start.sh /start.sh
 RUN chmod 555 /start.sh
 
