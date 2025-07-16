@@ -19,10 +19,10 @@ RUN a2enmod rewrite
 COPY _etc_apache2_sites-available_default.conf /etc/apache2/sites-available/000-default.conf
 
 # sound playing capabilities
-RUN DEBIAN_FRONTEND=noninteractive apt-get install alsa-base alsa-utils sox libsndfile1-dev libttspico-utils -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get install alsa-base alsa-utils sox libsndfile1-dev libttspico-utils libsox-fmt-mp3 -y
 COPY _play_sound.php /play_sound.php
 RUN chmod 555 /play_sound.php
-COPY _play_sound.php /play_asset.php
+COPY _play_asset.php /play_asset.php
 RUN chmod 555 /play_asset.php
 RUN DEBIAN_FRONTEND=noninteractive apt-get install sudo -y
 RUN echo "www-data ALL=(ALL) NOPASSWD: /usr/bin/play,/usr/bin/amixer" >> /etc/sudoers
