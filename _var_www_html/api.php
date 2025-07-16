@@ -47,6 +47,11 @@ if( $path=="play_text" &&
 	play_text() ;
 }
 
+if( $path=="play_preloaded_asset" &&
+	$method=="POST" ) {
+	play_preloaded_asset() ;
+}
+
 close_with_400( "unknown path" ) ;
 exit( 1 ) ;
 
@@ -95,6 +100,41 @@ function play_text() {
 		}
 
 	    shell_exec( "/usr/bin/nohup /play_sound.php \"$text\" {$extra_args} &" ) ;
+
+		close_with_200( "ok!" ) ;
+	} else {
+	    // accounting for failover, you want to make sure you're only playing on the home orchestrator
+		// closing with 200 because it's not really an error if you're not home, that'll happen
+		close_with_200( "not the right orchestrator" ) ;
+	}
+}
+
+
+function play_preloaded_asset() {
+	global $device ;
+
+	if( trim(strtolower(getenv()['host']))==trim(strtolower($device)) ) {
+        $data = get_request_body() ;
+        $parsed_data = json_decode( $data, true ) ;
+
+        if( !is_array($parsed_data) ||
+            !array_key_exists('asset', $parsed_data) ) {
+        	close_with_400( "JSON data with 'asset' key required" ) ;
+	    }
+
+	    $file = str_replace( "/", "_", $parsed_data['asset'] ) ;
+	    $file = "/assets/{$file}" ;
+	    if( !file_exists($file) ) {
+	    	close_with_404( "asset doesn't exist" ) ;
+	    }
+
+	    $extra_args = "" ;
+	    if( isset($_GET['announcement_ding']) &&
+	    	$_GET['announcement_ding']=="true" ) {
+	    	$extra_args = "/assets/announcement_ding.wav" ;
+		}
+
+	    shell_exec( "/usr/bin/nohup /play_asset.php \"$file\" {$extra_args} &" ) ;
 
 		close_with_200( "ok!" ) ;
 	} else {
