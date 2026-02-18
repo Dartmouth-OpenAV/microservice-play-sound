@@ -82,7 +82,7 @@ function get_errors() {
 function play_text() {
 	global $device ;
 
-	if( trim(strtolower(getenv()['host']))==trim(strtolower($device)) ) {
+	if( trim(strtolower(file_get_contents("/etc/hostname.host")))==trim(strtolower($device)) ) {
         $data = get_request_body() ;
         $parsed_data = json_decode( $data, true ) ;
 
@@ -113,7 +113,7 @@ function play_text() {
 function play_preloaded_asset() {
 	global $device ;
 
-	if( trim(strtolower(getenv()['host']))==trim(strtolower($device)) ) {
+	if( trim(strtolower(file_get_contents("/etc/hostname.host")))==trim(strtolower($device)) ) {
         $data = get_request_body() ;
         $parsed_data = json_decode( $data, true ) ;
 
